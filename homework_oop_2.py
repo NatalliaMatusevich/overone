@@ -28,8 +28,32 @@ class NonNegativeValue:
             raise ValueError(f"{self.name} cannot be negative")
         instance.__dict__[self.name] = value
 
+class String:
+
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__[self.name]
+
+    def __set__(self, instance, value):
+        if not isinstance(value, str):
+            raise TypeError(f'Expected {self.name} to be an str')
+        instance.__dict__[self.name] = value
+
+    def __set__(self, instance, value):
+        for i in value:
+            if i.isalpha() == False:
+                raise ValueError(f'Expected {self.name} can be from letters')
+
+    def __set__(self, instance, value):
+        if len(value) == 0:
+            raise ValueError(f'Expected {self.name} cannot be empty')
+
 class Pet:
     age = NonNegativeValue()
+    name = String()
+    master = String()
 
     def __init__(self, name, age, master):
         self.name = name
@@ -74,7 +98,7 @@ class Parrot(Pet):
         print('Летать!')
 
 
-beagle = Dog('Lucky', 5, 'Dasha')
+beagle = Dog('ggg', 5, '*')
 beagle.run(), beagle.jump(), beagle.birthday(), beagle.sleep(), beagle.bark()
 print('**********')
 siamese = Cat('Sima', 1, 'Danik')
