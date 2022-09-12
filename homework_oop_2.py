@@ -14,7 +14,27 @@
 # Создать объект каждого класса и
 # вызвать все его методы.
 #
+
+
+class NonNegativeValue:
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__[self.name]
+
+    def __set__(self, instance, value):
+        if value <= 0:
+            raise ValueError(f"{self.name} cannot be negative")
+        instance.__dict__[self.name] = value
+
 class Pet:
+    age = NonNegativeValue()
+
+    def __init__(self, name, age, master):
+        self.name = name
+        self.age = age
+        self.master = master
 
     def run(self):
         print('Бегать!')
@@ -31,9 +51,8 @@ class Pet:
 class Dog(Pet):
 
     def __init__(self, name, age, master):
-        self.name = name
-        self.age = age
-        self.master = master
+        super().__init__(name, age, master)
+
 
     def bark(self):
         print('Лаять!')
@@ -41,9 +60,7 @@ class Dog(Pet):
 class Cat(Pet):
 
     def __init__(self, name, age, master):
-        self.name = name
-        self.age = age
-        self.master = master
+        super().__init__(name, age, master)
 
     def meow(self):
         print('Мяукать!')
@@ -51,19 +68,17 @@ class Cat(Pet):
 class Parrot(Pet):
 
     def __init__(self, name, age, master):
-        self.name = name
-        self.age = age
-        self.master = master
+        super().__init__(name, age, master)
 
     def fly(self):
         print('Летать!')
 
-beagle = Dog('Lucky', 2, 'Dasha')
+
+beagle = Dog('Lucky', 5, 'Dasha')
 beagle.run(), beagle.jump(), beagle.birthday(), beagle.sleep(), beagle.bark()
 print('**********')
 siamese = Cat('Sima', 1, 'Danik')
 siamese.run(), siamese.jump(), siamese.birthday(), siamese.sleep(), siamese.meow()
 print('**********')
-cockatiel = Parrot('Kesha', 3, 'Inna')
+cockatiel = Parrot('Kesha', 5, 'Inna')
 cockatiel.run(), cockatiel.jump(), cockatiel.birthday(), cockatiel.sleep(), cockatiel.fly()
-
